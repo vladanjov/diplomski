@@ -10,8 +10,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 
 
 private val LightColorScheme = lightColors(
-    primary = Purple40,
-    secondary = PurpleGrey40
+    primary = PrimaryColor,
+    secondary = SecondaryColor,
+    primaryVariant = PrimaryVariantColor
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

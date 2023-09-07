@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Diplomski</string>
+    <string name="artikli">Artikli</string>
+    <string name="dobavljaci">Dobavljaci</string>
+    <string name="istorija">Istorija</string>
+    <string name="korpa">Korpa</string>
 </resources>
