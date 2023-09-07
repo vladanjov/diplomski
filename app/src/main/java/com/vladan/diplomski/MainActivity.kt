@@ -38,6 +38,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vladan.diplomski.navigation.BottomNavItem
 import com.vladan.diplomski.ui.login.LoginScreen
+import com.vladan.diplomski.ui.register.RegisterScreen
 import com.vladan.diplomski.ui.theme.DiplomskiTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -139,7 +140,7 @@ fun NavGraphBuilder.addDestinations(navController: NavController) {
             goToRegister = { navController.navigate("register") })
     }
     composable("register") {
-        Text(text = "Register")
+        RegisterScreen(viewModel = hiltViewModel())
     }
     composable(BottomNavItem.Artikli.route) { Text(text = "Artikli") }
     composable(BottomNavItem.Dobavljaci.route) { Text(text = "Dobavljaci") }

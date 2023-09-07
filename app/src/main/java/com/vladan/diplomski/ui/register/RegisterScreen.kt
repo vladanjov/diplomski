@@ -1,7 +1,6 @@
-package com.vladan.diplomski.ui.login
+package com.vladan.diplomski.ui.register
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,11 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -28,26 +28,58 @@ import com.vladan.diplomski.ui.theme.PrimaryColor
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(goToRegister: () -> Unit, viewModel: LoginViewModel) {
+fun RegisterScreen(viewModel: RegisterViewModel) {
 
     val state = viewModel.state.collectAsState().value
+    val scrollState = rememberScrollState()
 
     Scaffold(Modifier.fillMaxSize(), backgroundColor = MaterialTheme.colors.background) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.Center,
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.size(60.dp))
             Text(
-                text = "PRIJAVI SE",
+                text = "Registracija",
                 style = MaterialTheme.typography.caption.copy(
                     color = PrimaryColor,
                     fontSize = 24.sp
                 )
             )
-            Spacer(modifier = Modifier.size(60.dp))
+            Spacer(modifier = Modifier.size(40.dp))
+            InputWithError(
+                text = state.name,
+                label = "Ime kompanije",
+                onTextChange = { viewModel.typeName(it) },
+                modifier = Modifier.fillMaxWidth(),
+                columnModifier = Modifier.fillMaxWidth(),
+                onNextClick = { },
+                errorMessage = state.nameError
+            )
+            Spacer(modifier = Modifier.size(20.dp))
+            InputWithError(
+                text = state.pib,
+                label = "PIB",
+                onTextChange = { viewModel.typePib(it) },
+                modifier = Modifier.fillMaxWidth(),
+                columnModifier = Modifier.fillMaxWidth(),
+                onNextClick = { },
+                errorMessage = state.pibError
+            )
+            Spacer(modifier = Modifier.size(20.dp))
+            InputWithError(
+                text = state.address,
+                label = "Adresa",
+                onTextChange = { viewModel.typeAddress(it) },
+                modifier = Modifier.fillMaxWidth(),
+                columnModifier = Modifier.fillMaxWidth(),
+                onNextClick = { },
+                errorMessage = state.addressError
+            )
+            Spacer(modifier = Modifier.size(20.dp))
             InputWithError(
                 text = state.email,
                 label = "E-mail",
@@ -66,22 +98,23 @@ fun LoginScreen(goToRegister: () -> Unit, viewModel: LoginViewModel) {
                 onNextClick = { },
                 errorMessage = state.passwordError
             )
-            Spacer(modifier = Modifier.size(30.dp))
+            Spacer(modifier = Modifier.size(40.dp))
             Button(
                 modifier = Modifier
                     .height(54.dp)
                     .fillMaxWidth(),
-                onClick = { viewModel.login(state.email, state.password) }) {
-                Text(text = "Uloguj se")
-            }
-            Spacer(modifier = Modifier.size(30.dp))
-            TextButton(
-                modifier = Modifier
-                    .height(54.dp)
-                    .fillMaxWidth(),
-                onClick = { goToRegister.invoke() }) {
+                onClick = {
+                    viewModel.register(
+                        state.name,
+                        state.email,
+                        state.pib,
+                        state.address,
+                        state.password
+                    )
+                }) {
                 Text(text = "Registruj se")
             }
         }
     }
+
 }

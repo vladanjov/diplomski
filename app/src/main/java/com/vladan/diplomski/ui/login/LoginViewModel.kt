@@ -27,17 +27,17 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         val errors = mutableListOf<Boolean>()
 
         if (password.isBlank()) {
-            _state.update { it.copy(passwordError = "Password je obavezno polje.") }
+            _state.update { it.copy(passwordError = "Šifra je obavezno polje.") }
             errors.add(false)
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _state.update { it.copy(emailError = "Email nije validan") }
+            _state.update { it.copy(emailError = "E-mail nije validan.") }
             errors.add(false)
         }
 
         if (email.isBlank()) {
-            _state.update { it.copy(emailError = "Email je obavezno polje.") }
+            _state.update { it.copy(emailError = "E-mail je obavezno polje.") }
             errors.add(false)
         }
 
