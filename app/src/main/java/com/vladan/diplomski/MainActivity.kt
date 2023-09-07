@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraphBuilder
@@ -36,8 +37,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vladan.diplomski.navigation.BottomNavItem
+import com.vladan.diplomski.ui.login.LoginScreen
 import com.vladan.diplomski.ui.theme.DiplomskiTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +122,7 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = BottomNavItem.Artikli.route,
+            startDestination = "login",
             Modifier.padding(innerPadding)
         ) {
             addDestinations(navController)
@@ -129,6 +133,14 @@ fun MainScreen() {
 
 
 fun NavGraphBuilder.addDestinations(navController: NavController) {
+    composable("login") {
+        LoginScreen(
+            viewModel = hiltViewModel(),
+            goToRegister = { navController.navigate("register") })
+    }
+    composable("register") {
+        Text(text = "Register")
+    }
     composable(BottomNavItem.Artikli.route) { Text(text = "Artikli") }
     composable(BottomNavItem.Dobavljaci.route) { Text(text = "Dobavljaci") }
     composable(BottomNavItem.Istorija.route) { Text(text = "Istorija") }
