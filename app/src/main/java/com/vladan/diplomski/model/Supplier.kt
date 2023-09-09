@@ -1,11 +1,15 @@
 package com.vladan.diplomski.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Supplier(
     val id: String,
     val name: String,
     val address: String,
     val selected: Boolean
-)
+): Parcelable
 
 val mockSupplier1 = Supplier("1", "Air Point", "Adresa 1", false)
 val mockSupplier2 = Supplier("2", "Agro Papuk", "Adresa 1", false)

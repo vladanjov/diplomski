@@ -1,6 +1,7 @@
 package com.vladan.diplomski.ui.register
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,15 +16,18 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladan.diplomski.ui.common.InputWithError
 import com.vladan.diplomski.ui.common.PasswordInputWithError
 import com.vladan.diplomski.ui.theme.PrimaryColor
+import com.vladan.diplomski.util.events.UiEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -32,6 +36,16 @@ fun RegisterScreen(viewModel: RegisterViewModel) {
 
     val state = viewModel.state.collectAsState().value
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+
+    LaunchedEffect(context) {
+        viewModel.events.collect {
+            when (it) {
+                is UiEvent.ToastEvent -> Toast.makeText(context, it.value, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
 
     Scaffold(Modifier.fillMaxSize(), backgroundColor = MaterialTheme.colors.background) {
         Column(

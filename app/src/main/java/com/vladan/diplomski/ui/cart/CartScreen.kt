@@ -17,13 +17,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -33,21 +37,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladan.diplomski.model.OrderElement
 import com.vladan.diplomski.model.Supplier
+import com.vladan.diplomski.ui.common.EditDialog
 import com.vladan.diplomski.ui.common.TopBar
 import com.vladan.diplomski.ui.theme.PrimaryColor
 import com.vladan.diplomski.ui.theme.SecondaryColor
 
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CartScreen(viewModel: CartViewModel) {
 
     val state = viewModel.uiState.collectAsState().value
 
+    val editItemDialog = remember { mutableStateOf<OrderElement?>(null) }
+
     Scaffold(modifier = Modifier.fillMaxSize(),
         floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = { Button(modifier = Modifier.padding(horizontal = 18.dp).height(48.dp).fillMaxWidth(), onClick = { }) {
-            Text(text = "Poruči", style = MaterialTheme.typography.button.copy(color = Color.White))
-        }
+        floatingActionButton = {
+            Button(
+                modifier = Modifier
+                    .padding(horizontal = 18.dp)
+                    .height(48.dp)
+                    .fillMaxWidth(),
+                onClick = { }) {
+                Text(
+                    text = "Poruči",
+                    style = MaterialTheme.typography.button.copy(color = Color.White)
+                )
+            }
         },
         topBar = { TopBar(title = "Korpa") }) {
         LazyColumn(
@@ -56,7 +73,7 @@ fun CartScreen(viewModel: CartViewModel) {
             state.groupedArticles.forEach {
                 item { SupplierHeader(supplier = it.key) }
                 items(it.value) {
-                    OrderElementViewHolder(orderElement = it)
+                    OrderElementViewHolder(orderElement = it) { editItemDialog.value = it }
                 }
                 item { SupplierSum(sum = state.getGroupedSum(it.key)) }
             }
@@ -66,11 +83,20 @@ fun CartScreen(viewModel: CartViewModel) {
                 }
             }
         }
+
+        editItemDialog.value?.let {
+            EditDialog(
+                item = it,
+                onClickNegativeButton = { viewModel.removeElement(it) },
+                onClickPositiveButton = { viewModel.editElement(it) },
+                onDismissRequest = { editItemDialog.value = null })
+        }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun OrderElementViewHolder(orderElement: OrderElement) {
+fun OrderElementViewHolder(orderElement: OrderElement, onClickElement: (OrderElement) -> Unit) {
     Card(
         modifier = Modifier
             .padding(horizontal = 18.dp)
@@ -78,6 +104,7 @@ fun OrderElementViewHolder(orderElement: OrderElement) {
         shape = RectangleShape,
         border = BorderStroke(0.1.dp, Color.LightGray),
         elevation = 1.dp,
+        onClick = { onClickElement.invoke(orderElement) }
     ) {
         Row(
             modifier = Modifier

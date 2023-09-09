@@ -1,5 +1,8 @@
 package com.vladan.diplomski.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 data class Order(
     val id: String,
     val supplier: Supplier,
@@ -7,10 +10,11 @@ data class Order(
 )
 
 
+@Parcelize
 data class OrderElement(
     val count: Int,
     val article: Article
-)
+) : Parcelable
 
 
 val mockCartOrderElement1 = OrderElement(1, mockArticles[0])
@@ -19,4 +23,9 @@ val mockCartOrderElement3 = OrderElement(3, mockArticles[2])
 val mockCartOrderElement4 = OrderElement(1, mockArticles[3])
 val mockCartOrderElement5 = OrderElement(1, mockArticles[4])
 
-val mockCartOrderElements = listOf(mockCartOrderElement1, mockCartOrderElement2, mockCartOrderElement3, mockCartOrderElement4)
+val mockCartOrderElements = listOf(
+    mockCartOrderElement1,
+    mockCartOrderElement2,
+    mockCartOrderElement3,
+    mockCartOrderElement4
+)

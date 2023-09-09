@@ -36,13 +36,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.vladan.diplomski.navigation.BottomNavItem
 import com.vladan.diplomski.ui.articles.ArticlesScreen
 import com.vladan.diplomski.ui.cart.CartScreen
 import com.vladan.diplomski.ui.login.LoginScreen
 import com.vladan.diplomski.ui.register.RegisterScreen
 import com.vladan.diplomski.ui.suppliers.SuppliersScreen
 import com.vladan.diplomski.ui.theme.DiplomskiTheme
+import com.vladan.diplomski.util.navigation.BottomNavItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

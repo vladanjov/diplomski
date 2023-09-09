@@ -1,5 +1,9 @@
 package com.vladan.diplomski.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Article(
     val id: String,
     val name: String,
@@ -7,7 +11,7 @@ data class Article(
     val amount: String,
     val price: String,
     val supplier: Supplier
-)
+): Parcelable
 
 val mockArticles = listOf(
     Article("1", "Coca cola / 2l", null, "paket (6 kom)", "1.000,00", mockSupplier1),

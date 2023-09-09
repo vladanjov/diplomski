@@ -1,4 +1,4 @@
-package com.vladan.diplomski.navigation
+package com.vladan.diplomski.util.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
