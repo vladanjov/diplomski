@@ -18,6 +18,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.vladan.diplomski.repository.pref.Preferences
 import com.vladan.diplomski.ui.articles.ArticlesScreen
 import com.vladan.diplomski.ui.cart.CartScreen
 import com.vladan.diplomski.ui.history.HistoryScreen
@@ -45,9 +47,13 @@ import com.vladan.diplomski.ui.suppliers.SuppliersScreen
 import com.vladan.diplomski.ui.theme.DiplomskiTheme
 import com.vladan.diplomski.util.navigation.BottomNavItem
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var preferences: Preferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -57,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen()
+                    MainScreen(preferences)
                 }
             }
         }
@@ -65,7 +71,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(preferences: Preferences) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -127,7 +133,7 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = BottomNavItem.Artikli.route,
+            startDestination = preferences.accessTokenFlow.collectAsState(initial = null).value?.let { BottomNavItem.Artikli.route } ?: "login",
             Modifier.padding(innerPadding)
         ) {
             addDestinations(navController)

@@ -77,7 +77,7 @@ class RegisterViewModel @Inject constructor(val repository: Repository) : ViewMo
             errors.add(false)
         }
 
-        return errors.any { !it }
+        return errors.isEmpty()
     }
 
     fun register(name: String, email: String, pib: String, address: String, password: String) {

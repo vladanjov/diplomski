@@ -50,7 +50,7 @@ class LoginViewModel @Inject constructor(val repository: Repository) : ViewModel
             errors.add(false)
         }
 
-        return errors.any { !it }
+        return errors.isEmpty()
     }
 
     fun login(email: String, password: String) {
