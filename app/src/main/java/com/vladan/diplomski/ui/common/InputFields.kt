@@ -10,6 +10,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladan.diplomski.R
 import com.vladan.diplomski.ui.theme.ErrorColor
+import com.vladan.diplomski.ui.theme.SecondaryColor
 
 @ExperimentalComposeUiApi
 @Composable
@@ -102,8 +103,10 @@ fun PasswordInputWithError(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(modifier = modifier
-        .fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
         OutlinedTextField(
             value = text ?: "",
             label = { Text(label, style = MaterialTheme.typography.subtitle2) },
@@ -111,7 +114,11 @@ fun PasswordInputWithError(
             modifier = modifier,
             singleLine = true,
             maxLines = 1,
-            textStyle = TextStyle(color = MaterialTheme.colors.primary, fontWeight = FontWeight.Normal, fontSize = 15.sp),
+            textStyle = TextStyle(
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Normal,
+                fontSize = 15.sp
+            ),
             keyboardOptions = keyboardOptions,
             keyboardActions = KeyboardActions(
                 onNext = { onNextClick() },
@@ -157,4 +164,30 @@ fun TextError(message: String) {
         modifier = Modifier.padding(start = 2.dp, top = 2.dp),
         color = ErrorColor
     )
+}
+
+@ExperimentalComposeUiApi
+@Composable
+fun TextButtonBase(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    text: String,
+    style: TextStyle? = null,
+) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    TextButton(
+        onClick = {
+            onClick().also {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            }
+        },
+        modifier = modifier
+    ) {
+        Text(
+            text,
+            style = style ?: MaterialTheme.typography.body1.copy(color = SecondaryColor)
+        )
+    }
 }

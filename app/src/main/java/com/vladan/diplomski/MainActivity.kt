@@ -37,8 +37,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vladan.diplomski.navigation.BottomNavItem
+import com.vladan.diplomski.ui.articles.ArticlesScreen
 import com.vladan.diplomski.ui.login.LoginScreen
 import com.vladan.diplomski.ui.register.RegisterScreen
+import com.vladan.diplomski.ui.suppliers.SuppliersScreen
 import com.vladan.diplomski.ui.theme.DiplomskiTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -123,7 +125,7 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = "login",
+            startDestination = BottomNavItem.Artikli.route,
             Modifier.padding(innerPadding)
         ) {
             addDestinations(navController)
@@ -142,8 +144,8 @@ fun NavGraphBuilder.addDestinations(navController: NavController) {
     composable("register") {
         RegisterScreen(viewModel = hiltViewModel())
     }
-    composable(BottomNavItem.Artikli.route) { Text(text = "Artikli") }
-    composable(BottomNavItem.Dobavljaci.route) { Text(text = "Dobavljaci") }
+    composable(BottomNavItem.Artikli.route) { ArticlesScreen(viewModel = hiltViewModel()) }
+    composable(BottomNavItem.Dobavljaci.route) { SuppliersScreen(hiltViewModel()) }
     composable(BottomNavItem.Istorija.route) { Text(text = "Istorija") }
     composable(BottomNavItem.Korpa.route) { Text(text = "Korpa") }
 }
