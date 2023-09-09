@@ -38,6 +38,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vladan.diplomski.ui.articles.ArticlesScreen
 import com.vladan.diplomski.ui.cart.CartScreen
+import com.vladan.diplomski.ui.history.HistoryScreen
 import com.vladan.diplomski.ui.login.LoginScreen
 import com.vladan.diplomski.ui.register.RegisterScreen
 import com.vladan.diplomski.ui.suppliers.SuppliersScreen
@@ -146,7 +147,7 @@ fun NavGraphBuilder.addDestinations(navController: NavController) {
         RegisterScreen(viewModel = hiltViewModel())
     }
     composable(BottomNavItem.Artikli.route) { ArticlesScreen(viewModel = hiltViewModel()) }
-    composable(BottomNavItem.Dobavljaci.route) { SuppliersScreen(hiltViewModel()) }
-    composable(BottomNavItem.Istorija.route) { Text(text = "Istorija") }
+    composable(BottomNavItem.Dobavljaci.route) { SuppliersScreen(viewModel = hiltViewModel()) }
+    composable(BottomNavItem.Istorija.route) { HistoryScreen(viewModel = hiltViewModel()) }
     composable(BottomNavItem.Korpa.route) { CartScreen(viewModel = hiltViewModel()) }
 }

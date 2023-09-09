@@ -8,7 +8,19 @@ data class Order(
     val id: String,
     val supplier: Supplier,
     val articles: List<OrderElement>
-)
+) {
+    fun getSum(): Int {
+        var sum = 0
+        articles.forEach {
+            val numericString = it.article.price.replace(",00", "").replace(Regex("\\D"), "")
+            numericString.toIntOrNull()?.let { int ->
+                sum += (it.count * int)
+            }
+
+        }
+        return sum
+    }
+}
 
 
 @Parcelize
@@ -30,4 +42,8 @@ val mockCartOrderElements = listOf(
     mockCartOrderElement2,
     mockCartOrderElement3,
     mockCartOrderElement4
+)
+
+val mockOrders = listOf(
+    Order("1", mockSupplier1, mockCartOrderElements),
 )
