@@ -1,6 +1,7 @@
 package com.vladan.diplomski.ui.cart
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +33,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,6 +44,7 @@ import com.vladan.diplomski.ui.common.EditDialog
 import com.vladan.diplomski.ui.common.TopBar
 import com.vladan.diplomski.ui.theme.PrimaryColor
 import com.vladan.diplomski.ui.theme.SecondaryColor
+import com.vladan.diplomski.util.events.UiEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -48,8 +52,17 @@ import com.vladan.diplomski.ui.theme.SecondaryColor
 fun CartScreen(viewModel: CartViewModel) {
 
     val state = viewModel.uiState.collectAsState().value
-
     val editItemDialog = remember { mutableStateOf<OrderElement?>(null) }
+    val context = LocalContext.current
+
+    LaunchedEffect(context) {
+        viewModel.events.collect {
+            when (it) {
+                is UiEvent.ToastEvent -> Toast.makeText(context, it.value, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         floatingActionButtonPosition = FabPosition.Center,

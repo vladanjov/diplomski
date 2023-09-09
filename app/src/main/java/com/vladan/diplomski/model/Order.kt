@@ -1,6 +1,7 @@
 package com.vladan.diplomski.model
 
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
 data class Order(
@@ -11,6 +12,7 @@ data class Order(
 
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class OrderElement(
     val count: Int,
     val article: Article

@@ -1,10 +1,13 @@
 package com.vladan.diplomski.repository
 
 import com.vladan.diplomski.model.Article
+import com.vladan.diplomski.model.OrderElement
 import com.vladan.diplomski.model.requests.AddArticleRequest
 import com.vladan.diplomski.model.requests.ChangeStatusOfSupplier
 import com.vladan.diplomski.model.requests.LoginRequest
 import com.vladan.diplomski.model.requests.RegisterRequest
+import com.vladan.diplomski.model.requests.RemoveArticleRequest
+import com.vladan.diplomski.model.requests.UpdateOrderElementRequest
 import com.vladan.diplomski.model.responses.ArticlesResponse
 import com.vladan.diplomski.model.responses.CartResponse
 import com.vladan.diplomski.model.responses.DefaultResponse
@@ -91,6 +94,30 @@ class Repository(private val apiService: ApiService, private val preferences: Pr
         return try {
             val response =
                 apiService.addArticleToCart(AddArticleRequest(article))
+            Result.Success(response)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    suspend fun deleteArticleFromCart(
+        article: Article
+    ): Result<DefaultResponse> {
+        return try {
+            val response =
+                apiService.deleteArticleFromCart(RemoveArticleRequest(article))
+            Result.Success(response)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    suspend fun editCartElement(
+        element: OrderElement
+    ): Result<DefaultResponse> {
+        return try {
+            val response =
+                apiService.editCartElement(UpdateOrderElementRequest(element))
             Result.Success(response)
         } catch (e: Exception) {
             Result.Error(e)

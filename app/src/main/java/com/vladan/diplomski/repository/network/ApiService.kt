@@ -4,6 +4,8 @@ import com.vladan.diplomski.model.requests.AddArticleRequest
 import com.vladan.diplomski.model.requests.ChangeStatusOfSupplier
 import com.vladan.diplomski.model.requests.LoginRequest
 import com.vladan.diplomski.model.requests.RegisterRequest
+import com.vladan.diplomski.model.requests.RemoveArticleRequest
+import com.vladan.diplomski.model.requests.UpdateOrderElementRequest
 import com.vladan.diplomski.model.responses.ArticlesResponse
 import com.vladan.diplomski.model.responses.CartResponse
 import com.vladan.diplomski.model.responses.DefaultResponse
@@ -12,7 +14,9 @@ import com.vladan.diplomski.model.responses.LoginResponse
 import com.vladan.diplomski.model.responses.SuppliersResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface ApiService {
 
@@ -30,6 +34,12 @@ interface ApiService {
 
     @POST("cart/add")
     suspend fun addArticleToCart(@Body request: AddArticleRequest): DefaultResponse
+
+    @POST("cart/delete")
+    suspend fun deleteArticleFromCart(@Body request: RemoveArticleRequest): DefaultResponse
+
+    @PUT("cart/edit")
+    suspend fun editCartElement(@Body request: UpdateOrderElementRequest): DefaultResponse
 
     @GET("suppliers")
     suspend fun getSuppliers(): SuppliersResponse
