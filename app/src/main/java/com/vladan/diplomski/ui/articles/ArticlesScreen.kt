@@ -1,6 +1,7 @@
 package com.vladan.diplomski.ui.articles
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladan.diplomski.model.Article
@@ -32,6 +35,7 @@ import com.vladan.diplomski.ui.common.TopBar
 import com.vladan.diplomski.ui.theme.PrimaryColor
 import com.vladan.diplomski.ui.theme.PrimaryVariantColor
 import com.vladan.diplomski.ui.theme.SecondaryColor
+import com.vladan.diplomski.util.events.UiEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -40,6 +44,16 @@ fun ArticlesScreen(viewModel: ArticlesViewModel) {
 
     val state = viewModel.state.collectAsState().value
     val addDialog = remember { mutableStateOf<Article?>(null) }
+    val context = LocalContext.current
+
+    LaunchedEffect(context) {
+        viewModel.events.collect {
+            when (it) {
+                is UiEvent.ToastEvent -> Toast.makeText(context, it.value, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = { TopBar(title = "Raspolozivi artikli") }) {
@@ -58,7 +72,7 @@ fun ArticlesScreen(viewModel: ArticlesViewModel) {
                 negativeButtonText = "Otkaži",
                 positiveButtonText = "Dodaj",
                 onClickNegativeButton = { addDialog.value = null },
-                onClickPositiveButton = { },
+                onClickPositiveButton = { viewModel.addArticle(it) },
                 onDismissRequest = { addDialog.value = null })
         }
 

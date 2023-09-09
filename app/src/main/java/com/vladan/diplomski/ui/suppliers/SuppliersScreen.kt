@@ -2,6 +2,7 @@ package com.vladan.diplomski.ui.suppliers
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,22 +20,36 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladan.diplomski.model.Supplier
 import com.vladan.diplomski.ui.common.TopBar
 import com.vladan.diplomski.ui.theme.PrimaryColor
+import com.vladan.diplomski.util.events.UiEvent
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SuppliersScreen(viewModel: SuppliersViewModel) {
 
-    val state = viewModel.state.collectAsState().value
+    val state = viewModel.uiState.collectAsState().value
+    val context = LocalContext.current
+
+    LaunchedEffect(context) {
+        viewModel.events.collect {
+            when (it) {
+                is UiEvent.ToastEvent -> Toast.makeText(context, it.value, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = { TopBar(title = "Dodati dobavljači") }) {

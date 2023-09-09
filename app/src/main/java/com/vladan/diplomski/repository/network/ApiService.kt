@@ -1,9 +1,12 @@
 package com.vladan.diplomski.repository.network
 
+import com.vladan.diplomski.model.requests.AddArticleRequest
+import com.vladan.diplomski.model.requests.ChangeStatusOfSupplier
 import com.vladan.diplomski.model.requests.LoginRequest
 import com.vladan.diplomski.model.requests.RegisterRequest
 import com.vladan.diplomski.model.responses.ArticlesResponse
 import com.vladan.diplomski.model.responses.CartResponse
+import com.vladan.diplomski.model.responses.DefaultResponse
 import com.vladan.diplomski.model.responses.HistoryResponse
 import com.vladan.diplomski.model.responses.LoginResponse
 import com.vladan.diplomski.model.responses.SuppliersResponse
@@ -22,15 +25,21 @@ interface ApiService {
     @POST("auth/refresh")
     suspend fun refresh(@Body body: Map<String, String>): LoginResponse
 
-    @GET("/articles")
+    @GET("articles")
     suspend fun getArticles(): ArticlesResponse
 
-    @GET("/suppliers")
+    @POST("cart/add")
+    suspend fun addArticleToCart(@Body request: AddArticleRequest): DefaultResponse
+
+    @GET("suppliers")
     suspend fun getSuppliers(): SuppliersResponse
 
-    @GET("/cart")
+    @POST("suppliers/status")
+    suspend fun changeStatusOfSupplier(@Body request: ChangeStatusOfSupplier): DefaultResponse
+
+    @GET("cart")
     suspend fun getCart(): CartResponse
 
-    @GET("/history")
+    @GET("history")
     suspend fun getHistory(): HistoryResponse
 }

@@ -1,9 +1,13 @@
 package com.vladan.diplomski.repository
 
+import com.vladan.diplomski.model.Article
+import com.vladan.diplomski.model.requests.AddArticleRequest
+import com.vladan.diplomski.model.requests.ChangeStatusOfSupplier
 import com.vladan.diplomski.model.requests.LoginRequest
 import com.vladan.diplomski.model.requests.RegisterRequest
 import com.vladan.diplomski.model.responses.ArticlesResponse
 import com.vladan.diplomski.model.responses.CartResponse
+import com.vladan.diplomski.model.responses.DefaultResponse
 import com.vladan.diplomski.model.responses.HistoryResponse
 import com.vladan.diplomski.model.responses.LoginResponse
 import com.vladan.diplomski.model.responses.SuppliersResponse
@@ -81,10 +85,35 @@ class Repository(private val apiService: ApiService, private val preferences: Pr
         }
     }
 
+    suspend fun addArticleToCart(
+        article: Article
+    ): Result<DefaultResponse> {
+        return try {
+            val response =
+                apiService.addArticleToCart(AddArticleRequest(article))
+            Result.Success(response)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     suspend fun getSuppliers(
     ): Result<SuppliersResponse> {
         return try {
             val response = apiService.getSuppliers()
+            Result.Success(response)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    suspend fun changeStatusOfSupplier(
+        supplierId: String,
+        status: Boolean
+    ): Result<DefaultResponse> {
+        return try {
+            val response =
+                apiService.changeStatusOfSupplier(ChangeStatusOfSupplier(supplierId, status))
             Result.Success(response)
         } catch (e: Exception) {
             Result.Error(e)
